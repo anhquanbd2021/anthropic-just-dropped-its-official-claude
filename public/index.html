@@ -1,0 +1,90 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Certification Desk Lamp â€” a deterministic lab that reproduces the exact schema failure that breaks Claude Developer-track preparation.">
+  <title>Certification Desk Lamp â€” Claude schema lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@100..900&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+<!-- pb-shell --><link rel="stylesheet" href="./pb-shell.css"><!-- pb-shell --><!-- pb-back --><link rel="stylesheet" href="./pb-back.css"><!-- pb-back -->
+</head>
+<body>
+<main>
+  <a class="skip-link" href="#lab">Skip to lab</a>
+  <nav aria-label="Primary"><a aria-current="page" href="/">Lab</a><a href="/guide.html">Guide</a><a href="https://github.com/anhquanbd2021/anthropic-just-dropped-its-official-claude">Source</a></nav>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Certification Desk Lamp Â· Claude Developer track</p>
+      <h1>The schema mistake that fails Developer exams.</h1>
+      <p class="lede">Generic study notes teach <code>functions[].parameters</code>. Claude certification expects <code>tools[].input_schema</code>. Use the seeded build below to reproduce the exact failure, then patch the schema and watch the verdict flip.</p>
+    </div>
+    <p class="warning"><strong>Educational model only.</strong> This lab uses a deterministic simulation of the schema boundary â€” no live Anthropic API call, no real exam content, no credentials.</p>
+  </header>
+
+  <section class="panel controls" id="lab" aria-labelledby="lab-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">Interactive lab</p><h2 id="lab-title">Run the certification scenario</h2></div>
+      <span id="cache-lamp" class="cache-lamp" aria-label="Cache state"><span id="lamp-dot" class="lamp-dot stale"></span><span id="lamp-text">stale</span></span>
+    </div>
+    <div class="toggle-row">
+      <fieldset>
+        <legend>Build under test</legend>
+        <label><input type="radio" name="build" value="seeded" checked> <span>seeded â€” generic schema shipped</span></label>
+        <label><input type="radio" name="build" value="claude"> <span>claude-specific â€” exact tool boundary</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>Developer task</legend>
+        <label><input type="radio" name="task" value="schema" checked> <span>Schema checkpoint</span></label>
+        <label><input type="radio" name="task" value="cache"> <span>Cache-break assertion</span></label>
+      </fieldset>
+    </div>
+        <div class="control-actions">
+      <button id="run-local" type="button" class="primary">Run local scenario</button>
+      <button id="reset-lab" type="button" class="ghost">Reset lab</button>
+    </div>
+<p class="muted">The seeded build stores the generic schema and a stale cache marker. Switching to the Claude build changes both the schema shape and the cache key in one deterministic state transition.</p>
+  </section>
+
+  <section class="workspace" aria-label="Claude lab workspace">
+    <section class="panel" aria-labelledby="path-title">
+      <div class="section-heading"><div><p class="eyebrow">Tool boundary</p><h2 id="path-title">Schema path</h2></div></div>
+      <div class="schema-path">
+        <article class="schema-card generic" aria-label="Generic schema">
+          <p class="eyebrow">Generic study note</p>
+          <h3>`functions[].parameters`</h3>
+          <p class="muted">Fails the Claude boundary before the model sees the task. The exam expects the Claude-specific key set; a generic wrapper is a deterministic schema-mismatch error.</p>
+          <code class="block">{name: search_docs, parameters: {...}}</code>
+        </article>
+        <article class="schema-card claude" aria-label="Claude schema">
+          <p class="eyebrow">Certification-ready shape</p>
+          <h3>`tools[].input_schema`</h3>
+          <p class="muted">Passes the Claude boundary. This is the exact shape the Developer track tests on tool-use questions, including MCP-exposed tools.</p>
+          <code class="block">{name: search_docs, input_schema: {...}}</code>
+        </article>
+      </div>
+    </section>
+    <section class="api-task" aria-labelledby="verdict-title">
+      <section class="panel" aria-labelledby="verdict-title">
+        <div class="section-heading"><div><p class="eyebrow">Scenario verdict</p><h2 id="verdict-title">API task result</h2></div></div>
+        <div id="verdict" class="verdict pending"><strong>Ready</strong><span class="muted">Choose a build and task, then run the scenario.</span></div>
+      </section>
+      <section class="panel" aria-labelledby="evidence-title">
+        <div class="section-heading"><div><p class="eyebrow">Evidence</p><h2 id="evidence-title">Step log</h2></div><span id="evidence-badge" class="badge">â€”</span></div>
+        <pre id="evidence" class="evidence-log" aria-live="polite">No run yet.</pre>
+      </section>
+    </section>
+  </section>
+
+  <section class="panel" aria-labelledby="proves-title">
+    <p class="eyebrow">What this lab proves</p>
+    <h2 id="proves-title">One failure mode, two exact verdicts</h2>
+    <p>The lab proves the article's core claim without an external API. The seeded build uses a generic <code>functions[].parameters</code> schema and a stale cache marker. A deterministic <code>runDeveloperScenario()</code> call fails on the generic build and passes once the tool schema matches Claude's exact <code>tools[].input_schema</code> contract.</p>
+    <p class="closing-links"><a href="/guide.html">Read the guide</a><span class="sep" aria-hidden="true">Â·</span><a href="https://github.com/anhquanbd2021/anthropic-just-dropped-its-official-claude">Inspect source</a></p>
+  </section>
+</main>
+<script type="module" src="/app.js"></script>
+<!-- pb-shell --><a class="pb-shell" href="https://github.com/anhquanbd2021/anthropic-just-dropped-its-official-claude" title="anthropic-just-dropped-its-official-claude â€” an Article Playbook demo (view source)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="9" height="9" rx="2" fill="#245B78"/><rect x="13" y="2" width="9" height="9" rx="2" fill="#245B78" opacity=".45"/><rect x="2" y="13" width="9" height="9" rx="2" fill="#245B78" opacity=".45"/><rect x="13" y="13" width="9" height="9" rx="4.5" fill="#245B78"/></svg><b>anthropic-just-dropped-its-official-claude</b><i>DEMO</i></a><!-- pb-shell --><!-- pb-back --><a class="pb-back" id="pb-back" href="https://github.com/anhquanbd2021/anthropic-just-dropped-its-official-claude" title="Back to the article â€” anthropic-just-dropped-its-official-claude">â† Article <i>PLAYBOOK</i></a><script>(function(){var a=document.getElementById('pb-back');if(!a)return;var h=location.hostname;if(/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/.test(h)){a.href='//'+h+':'+(/^(localhost|127\.0\.0\.1)$/.test(h)?'1234':'30082')+'/microsites/article.html?slug=anthropic-just-dropped-its-official-claude';}})();</script><!-- pb-back --></body>
+</html>
